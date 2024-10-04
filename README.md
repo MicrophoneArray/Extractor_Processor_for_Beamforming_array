@@ -11,4 +11,14 @@ To build the project, use the following command. This avoids potential dependenc
 ## Run
 launch the extractor and processor with `ros2 launch processor processor.launch.py `
 
+## Messages
+
+### Subscription
+
+`cae_micarray/audio/array` : the audio output of the microphone array
+
+### Publication
+
+`beamforming/beam_overlay_image` : the beamforming overlay image with the camera (lidar points in the future)
+`beamforming/beam_image` : the beam_raw image which shows the direction of the source of the sound 
 
