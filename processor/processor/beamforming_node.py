@@ -69,15 +69,15 @@ class BeamForming:
     def do_beamforming(self, mic_data):
 
         # write the mic_data in a h5 file
-        target_file = '/cae-microphone-array-containerized/src/Extractor_V2/processor/processor/dataset/audio.h5'
-        if os.path.exists(target_file):
-            os.remove(target_file)
-        with h5py.File(target_file, 'w') as data_file:
-            data_file.create_dataset('time_data', data=mic_data)
-            data_file['time_data'].attrs.__setitem__('sample_freq', 44000)
+        # target_file = '/cae-microphone-array-containerized/src/Extractor_V2/processor/processor/dataset/audio.h5'
+        # if os.path.exists(target_file):
+        #     os.remove(target_file)
+        # with h5py.File(target_file, 'w') as data_file:
+        #     data_file.create_dataset('time_data', data=mic_data)
+        #     data_file['time_data'].attrs.__setitem__('sample_freq', 44000)
         
         # calculate the beamfomring with the h5 file
-        ts = TimeSamples(name=target_file)
+        ts = TimeSamples(data=mic_data, sample_freq=44000)
         ps = PowerSpectra(time_data=ts, block_size=128, window='Hanning')
         bb = BeamformerBase(freq_data=ps, steer=self.st)
         pm = bb.synthetic(1200, 2)
@@ -87,7 +87,7 @@ class BeamForming:
     def draw_beam(self):
         # this function is used to save the beam image as a Sensor_msgs/Image message 
 
-        plot_min = self.Lm.max() - 10
+        plot_min = self.Lm.max() - 2
         plot_max = self.Lm.max()
         normalized_matrix = np.clip((self.Lm - plot_min) / (plot_max - plot_min) * 255, 0, 255).astype(np.uint8)
         image_matrix = normalized_matrix.T
@@ -127,9 +127,9 @@ class Beamforming_node(Node):
         super().__init__('beamforming_processor',namespace='beamforming')
 
         # subscribe to the audio and image topics
-        self.subscription1 = self.create_subscription(AvReader,'/extractor/av_message',self.av_callback,10)
-        self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 10)
-        self.beam_overlay_image_publisher = self.create_publisher(Image,'beam_overlay_image',10)
+        self.subscription1 = self.create_subscription(AvReader,'/extractor/av_message',self.av_callback,1)
+        self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 1)
+        self.beam_overlay_image_publisher = self.create_publisher(Image,'beam_overlay_image',1)
         self.bridge = CvBridge()
         self.model = "CAMERA"
         self.beam = BeamForming(self.model)

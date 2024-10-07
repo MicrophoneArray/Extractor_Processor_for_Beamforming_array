@@ -20,5 +20,6 @@ launch the extractor and processor with `ros2 launch processor processor.launch.
 ### Publication
 
 `beamforming/beam_overlay_image` : the beamforming overlay image with the camera (lidar points in the future)
+
 `beamforming/beam_image` : the beam_raw image which shows the direction of the source of the sound 
 
