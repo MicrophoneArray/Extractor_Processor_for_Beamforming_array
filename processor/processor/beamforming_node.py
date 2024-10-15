@@ -67,16 +67,6 @@ class BeamForming:
         print("BeamForming initialized")
 
     def do_beamforming(self, mic_data):
-
-        # write the mic_data in a h5 file
-        # target_file = '/cae-microphone-array-containerized/src/Extractor_V2/processor/processor/dataset/audio.h5'
-        # if os.path.exists(target_file):
-        #     os.remove(target_file)
-        # with h5py.File(target_file, 'w') as data_file:
-        #     data_file.create_dataset('time_data', data=mic_data)
-        #     data_file['time_data'].attrs.__setitem__('sample_freq', 44000)
-        
-        # calculate the beamfomring with the h5 file
         ts = TimeSamples(data=mic_data, sample_freq=44000)
         ps = PowerSpectra(time_data=ts, block_size=128, window='Hanning')
         bb = BeamformerBase(freq_data=ps, steer=self.st)
