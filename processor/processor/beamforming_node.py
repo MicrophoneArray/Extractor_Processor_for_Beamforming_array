@@ -3,15 +3,16 @@ import io
 import time
 import cv2
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, PointCloud2, PointField
 import os
 from cv_bridge import CvBridge
 import numpy as np
 import h5py
 from extractor_node.msg import AvReader
+import sensor_msgs_py.point_cloud2 as pc2
 import matplotlib.pyplot as plt
 from acoular import MicGeom, TimeSamples, PowerSpectra, RectGrid,\
-SteeringVector, BeamformerBase, BeamformerMusic, BeamformerEig, L_p, Environment
+SteeringVector, BeamformerBase, BeamformerMusic, BeamformerEig, L_p, Environment, ImportGrid
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
@@ -32,7 +33,7 @@ class cameraAlign:
 class BeamForming:
     def __init__(self,model) -> None:
         self.distance = 5
-        self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/ourmicarray_56.xml')
+        self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/32_mic_on_the_car.xml')
         self.alignment = cameraAlign()
         self.grid_increment = 0.4
         self.array_arrngmnt = None
@@ -44,25 +45,23 @@ class BeamForming:
 
         self.freq = 1200
 
-        # create the grid for beamforming 
-        width  = 2 * (self.distance - self.alignment.position_z) * np.tan(self.alignment.angle_of_view)
-        height = width * self.alignment.aspect_ratio
 
-        if model == "CAMERA":
-            self.x_min_grid = -0.5*width - self.alignment.position_x 
-            self.x_max_grid = 0.5*width - self.alignment.position_x
-            self.y_min_grid = -0.5*height + self.alignment.position_y
-            self.y_max_grid = 0.5*height + self.alignment.position_y
+        # create the point cloud for the microphone array
+        self.cloud =  PointCloud2()
+        self.header = std_msgs.msg.Header()
+        self.header.stamp = rclpy.clock.Clock().now().to_msg()
+        self.header.frame_id = 'mic_array'
+        self.cloud.header = self.header
 
-        elif model == "MICARRAY":
+        self.fields = [
+            PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
+            PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
+            PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
+            PointField(name='rgb', offset=12, datatype=PointField.FLOAT32, count=1),
+        ]
 
-            self.x_min_grid = -0.5*width
-            self.x_max_grid = 0.5*width
-            self.y_min_grid = -0.5*height
-            self.y_max_grid = 0.5*height 
-
-        self.rg = RectGrid(x_min=self.x_min_grid, x_max=self.x_max_grid, y_min=self.y_min_grid, y_max=self.y_max_grid, z=self.distance, increment=self.grid_increment)
-        self.st = SteeringVector(grid=self.rg, mics=self.mg)
+        self.grid = ImportGrid(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/circular_grid.xml')
+        self.st = SteeringVector(grid=self.grid, mics=self.mg)
 
         print("BeamForming initialized")
 
@@ -75,40 +74,26 @@ class BeamForming:
         return
 
     def draw_beam(self):
-        # this function is used to save the beam image as a Sensor_msgs/Image message 
+        # this function is used to save the beam outcome to an audio point cloud 
 
         plot_min = self.Lm.max() - 2
         plot_max = self.Lm.max()
-        normalized_matrix = np.clip((self.Lm - plot_min) / (plot_max - plot_min) * 255, 0, 255).astype(np.uint8)
-        image_matrix = normalized_matrix.T
 
-        # transfer the gray scale image to a color image
-        colormap = np.zeros((256, 4), dtype=np.uint8)
-        colormap = np.zeros((256, 4), dtype=np.uint8)
-        colormap[:, 1] = np.linspace(255, 0, 256) 
-        colormap[:, 2] = 255
-        colormap[:, 0] = np.linspace(255, 0, 256) 
-        colormap[:, 3] = np.linspace(0, 255, 256)  
-        color_image = colormap[image_matrix]
-        img = np.flipud(color_image)
+        #normalized_matrix = np.clip((self.Lm - plot_min) / (plot_max - plot_min) * 255, 0, 255).astype(np.uint8)
+        
+        output_point = self.Lm[self.Lm > plot_min]
+        grid_output = self.grid.grid[:,self.Lm > plot_min]
+        points = []
 
-        ros_image = self.bridge.cv2_to_imgmsg(img, encoding="rgba8")
-        return ros_image,img
-    
-    def draw_overlay(self, cam_pict, beam_pict):
+        for i in range(len(grid_output)):
+            point = [grid_output[i,0], grid_output[i,1], grid_output[i,2], rgb_to_float(255, 0, 0)]
+            points.append(point)
 
-        # add a transparent channel to the camera image
-        b, g, r = cv2.split(cam_pict)
-        alpha = np.ones_like(b) * 255 
-        rgba_image = cv2.merge((b, g, r, alpha))
+        cloud_= pc2.create_cloud(self.header, self.fields, points)
+        self.audio_point_publisher.publish(cloud)
+        self.get_logger().info('Published colored point cloud')
 
-        # resize the beam image 
-        beam_pict_resized = cv2.resize(beam_pict, (cam_pict.shape[1], cam_pict.shape[0]))
-
-        # overlay the images
-        overlay_pict = cv2.addWeighted(rgba_image, 1.0, beam_pict_resized, 0.3, 0)
-        ros_overlay_pict = self.bridge.cv2_to_imgmsg(overlay_pict, encoding="rgba8")
-        return ros_overlay_pict
+        return
 
     
 
@@ -118,28 +103,20 @@ class Beamforming_node(Node):
 
         # subscribe to the audio and image topics
         self.subscription1 = self.create_subscription(AvReader,'/extractor/av_message',self.av_callback,1)
-        self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 1)
-        self.beam_overlay_image_publisher = self.create_publisher(Image,'beam_overlay_image',1)
+        self.publisher = self.audio_point_publisher(PointCloud2, '/colored_point_cloud', 1)
         self.bridge = CvBridge()
-        self.model = "CAMERA"
         self.beam = BeamForming(self.model)
 
     def av_callback(self, msg):
         print("the message received")
-        audio_data = np.array(msg.audio).reshape(-1,56)
 
-        # calculate the beam image
+        # car only has 32 channels
+        audio_data = np.array(msg.audio).reshape(-1,32)
+
+        # calculate the beam and publish the audio point cloud 
         self.beam.do_beamforming(audio_data)
-        beam_image_ros, beam_image = self.beam.draw_beam()
+        self.beam.draw_beam()
 
-        # overlay the beam image to the camera image
-        cam_pict = np.asarray(self.bridge.imgmsg_to_cv2(msg.image,'bgr8'))
-        overlay_pict = self.beam.draw_overlay(cam_pict,beam_image)
-
-        # publish the beam and overlay image 
-        self.beam_image_publisher.publish(beam_image_ros)
-        self.beam_overlay_image_publisher.publish(overlay_pict)
-        print("the beam image is published")
 
 
 def main(args=None):
