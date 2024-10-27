@@ -1,14 +1,13 @@
 import rclpy
 import io
 import time
-import cv2
 from rclpy.node import Node
 from sensor_msgs.msg import Image, PointCloud2, PointField
 import os
 from cv_bridge import CvBridge
 import numpy as np
-import h5py
 from extractor_node.msg import AvReader
+import std_msgs.msg
 import sensor_msgs_py.point_cloud2 as pc2
 import matplotlib.pyplot as plt
 from acoular import MicGeom, TimeSamples, PowerSpectra, RectGrid,\
@@ -31,7 +30,7 @@ class cameraAlign:
         self.aspect_ratio  = 0.628
 
 class BeamForming:
-    def __init__(self,model) -> None:
+    def __init__(self) -> None:
         self.distance = 5
         self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/32_mic_on_the_car.xml')
         self.alignment = cameraAlign()
@@ -57,7 +56,12 @@ class BeamForming:
             PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
             PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
             PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
-            PointField(name='rgb', offset=12, datatype=PointField.FLOAT32, count=1),
+        ]
+
+        self.fields_with_color = [
+            PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
+            PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
+            PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
         ]
 
         self.grid = ImportGrid(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/circular_grid.xml')
@@ -75,25 +79,21 @@ class BeamForming:
 
     def draw_beam(self):
         # this function is used to save the beam outcome to an audio point cloud 
-
         plot_min = self.Lm.max() - 2
         plot_max = self.Lm.max()
-
-        #normalized_matrix = np.clip((self.Lm - plot_min) / (plot_max - plot_min) * 255, 0, 255).astype(np.uint8)
         
+        # show the point with potential sound source 
         output_point = self.Lm[self.Lm > plot_min]
         grid_output = self.grid.grid[:,self.Lm > plot_min]
         points = []
 
         for i in range(len(grid_output)):
-            point = [grid_output[i,0], grid_output[i,1], grid_output[i,2], rgb_to_float(255, 0, 0)]
+            point = [grid_output[i,0], grid_output[i,1], grid_output[i,2]]
             points.append(point)
 
-        cloud_= pc2.create_cloud(self.header, self.fields, points)
-        self.audio_point_publisher.publish(cloud)
-        self.get_logger().info('Published colored point cloud')
-
-        return
+        # create the point cloud accroding to the output from the microphone array
+        cloud= pc2.create_cloud(self.header, self.fields, points)
+        return cloud
 
     
 
@@ -102,10 +102,10 @@ class Beamforming_node(Node):
         super().__init__('beamforming_processor',namespace='beamforming')
 
         # subscribe to the audio and image topics
-        self.subscription1 = self.create_subscription(AvReader,'/extractor/av_message',self.av_callback,1)
-        self.publisher = self.audio_point_publisher(PointCloud2, '/colored_point_cloud', 1)
+        self.audio_subscription = self.create_subscription(AvReader,'/extractor/av_message',self.av_callback,1)
+        self.audio_cloud_publisher = self.create_publisher(PointCloud2, '/colored_point_cloud', 1)
         self.bridge = CvBridge()
-        self.beam = BeamForming(self.model)
+        self.beam = BeamForming()
 
     def av_callback(self, msg):
         print("the message received")
@@ -115,7 +115,10 @@ class Beamforming_node(Node):
 
         # calculate the beam and publish the audio point cloud 
         self.beam.do_beamforming(audio_data)
-        self.beam.draw_beam()
+        audio_cloud = self.beam.draw_beam()
+
+        # publish the audio point cloud
+        self.audio_cloud_publisher.publish(audio_cloud)
 
 
 
