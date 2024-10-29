@@ -1,0 +1,643 @@
+<?xml version='1.0' standalone='yes' ?>
+<GXML_Root>
+  <Noise Inspector type='Version'>6.1.1.3</Noise Inspector>
+  <sensors_in mems='2'>
+    <sensors dim='[32]' type='Cluster'>
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic000</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,6362599999999999</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,19596</z>
+        </position_in_m>
+        <sensitivity type='DBL'>8,261723E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:47</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic001</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,68226</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,22596</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,693673E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:47</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic002</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,6362599999999999</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,20404</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,693673E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:47</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic003</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,68226</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,23404</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,807693E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:53</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic004</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,6362599999999999</x>
+          <y type='DBL'>-0,1019</y>
+          <z type='DBL'>0,09595999999999999</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,09268E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:53</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic005</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,68226"</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,12096</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,399208E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:55</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic006</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,6362599999999999</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,10404000000000001</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,455484E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:01</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic007</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,68226</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,12904</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,997944E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:55</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic008</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,39726</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,54904</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,466274E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:54</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic009</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,19726</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,54904</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,0333E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:49</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic010</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,40274</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,54904</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,016463E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:52</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic011</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,20274</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,54904</z>
+        </position_in_m>
+        <sensitivity type='DBL'>8,150392E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:58</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic012</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,29725999999999997</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,50304</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,067463E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:58</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic013</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,09726</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,50304</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,06128E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:00</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic014</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,10274</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,50304</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,061557E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:00</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic015</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,30274</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,50304</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,019706E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:00</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic016</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,30274</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,49495999999999996</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,961523E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:50</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic017</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,40274</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,54096</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,590015E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:49</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic018</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,10274</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,49495999999999996</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,598379E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:52</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic019</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,20274</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,54096</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,092369E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:51</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic020</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,39726</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,54096</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,336375E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:48</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic021</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,29725999999999997</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,49495999999999996</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,268551E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:58</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic022</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,09726</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,49495999999999996</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,268551E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:58</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic023</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>0,09726</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,54096</z>
+        </position_in_m>
+        <sensitivity type='DBL'>5,989985E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:51</calibrated>
+      </ni_hardware_setup_in>
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic024</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,68774</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,22596</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,252925E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:54</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic025</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,64174</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,19596</z>
+        </position_in_m>
+        <sensitivity type='DBL'>8,277893E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:01</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic026</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,64174</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>0,09595999999999999</z>
+        </position_in_m>
+        <sensitivity type='DBL'>6,760681E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-15:59</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic027</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,68774</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>0,12096</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,68557E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:02</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic028</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,64174</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,10404000000000001</z>
+        </position_in_m>
+        <sensitivity type='DBL'>8,278721E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:04</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic029</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,68774</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,12904</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,805724E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>0</IEPE>
+        <coupling type='I32'>10050</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:04</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic030</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,64174</x>
+          <y type='DBL'>-0,10192</y>
+          <z type='DBL'>-0,20404</z>
+        </position_in_m>
+        <sensitivity type='DBL'>7,334883E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>4</IEPE>
+        <coupling type='I32'>10045</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:07</calibrated>
+      </ni_hardware_setup_in>
+
+      <ni_hardware_setup_in mems='9'>
+        <sensor_name type='String'>Mic031</sensor_name>
+        <sensor_type type='Enum U16' sel='microphone'>0</sensor_type>
+        <position_in_m mems='3'>
+          <x type='DBL'>-0,68774</x>
+          <y type='DBL'>-0,021920000000000002</y>
+          <z type='DBL'>-0,23404</z>
+        </position_in_m>
+        <sensitivity type='DBL'>8,08326E+7</sensitivity>
+        <EU type='String'>Pa</EU>
+        <IEPE type='U16'>4</IEPE>
+        <coupling type='I32'>10045</coupling>
+        <info mems='3'>
+          <transducer_model type='String'></transducer_model>
+          <SN type='String'></SN>
+          <manufacturer type='String'></manufacturer>
+        </info>
+        <calibrated type='String'>06.03.2019-16:07</calibrated>
+      </ni_hardware_setup_in>
