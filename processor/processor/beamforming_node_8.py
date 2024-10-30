@@ -3,11 +3,10 @@ import io
 import time
 import cv2
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import Image, CompressedImage
 import os
 from cv_bridge import CvBridge
 import numpy as np
-import h5py
 from extractor_node.msg import AvReaderCom
 import matplotlib.pyplot as plt
 from acoular import MicGeom, TimeSamples, PowerSpectra, RectGrid,\
@@ -31,8 +30,8 @@ class cameraAlign:
 
 class BeamForming:
     def __init__(self,model) -> None:
-        self.distance = 4
-        self.mg = MicGeom(from_file='/workspaces/autoware_iv/src/Extractor_Processor_for_Beamforming_array/processor/resource/Acoular_data/8_mic.xml')
+        self.distance = 2
+        self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/8_mic.xml')
         self.alignment = cameraAlign()
         self.grid_increment = 0.4
         self.array_arrngmnt = None
@@ -41,12 +40,14 @@ class BeamForming:
         self.y_min_grid = None
         self.y_max_grid = None
         self.bridge = CvBridge()
+        self.mg.mpos[[0, 2]] = self.mg.mpos[[2, 0]]
 
         self.freq = 1200
 
         # create the grid for beamforming 
         width  = 2 * (self.distance - self.alignment.position_z) * np.tan(self.alignment.angle_of_view)
         height = width * self.alignment.aspect_ratio
+        print(self.mg.mpos.shape)
 
         width_new = 4
         height_new = 4
@@ -64,22 +65,13 @@ class BeamForming:
             self.y_min_grid = -0.5*height_new
             self.y_max_grid = 0.5*height_new
 
-        self.rg = RectGrid(z_min=self.x_min_grid, z_max=self.x_max_grid, y_min=self.y_min_grid, y_max=self.y_max_grid, x=self.distance, increment=self.grid_increment)
+        self.rg = RectGrid(x_min=self.x_min_grid, x_max=self.x_max_grid, y_min=self.y_min_grid, y_max=self.y_max_grid, z=self.distance, increment=self.grid_increment)
         self.st = SteeringVector(grid=self.rg, mics=self.mg)
 
         print("BeamForming initialized")
 
     def do_beamforming(self, mic_data):
 
-        # write the mic_data in a h5 file
-        # target_file = '/cae-microphone-array-containerized/src/Extractor_V2/processor/processor/dataset/audio.h5'
-        # if os.path.exists(target_file):
-        #     os.remove(target_file)
-        # with h5py.File(target_file, 'w') as data_file:
-        #     data_file.create_dataset('time_data', data=mic_data)
-        #     data_file['time_data'].attrs.__setitem__('sample_freq', 44000)
-        
-        # calculate the beamfomring with the h5 file
         ts = TimeSamples(data=mic_data, sample_freq=44000)
         ps = PowerSpectra(time_data=ts, block_size=128, window='Hanning')
         bb = BeamformerBase(freq_data=ps, steer=self.st)
@@ -108,20 +100,20 @@ class BeamForming:
         ros_image = self.bridge.cv2_to_imgmsg(img, encoding="rgba8")
         return ros_image,img
     
-    def draw_overlay(self, cam_pict, beam_pict):
+    # def draw_overlay(self, cam_pict, beam_pict):
 
-        # add a transparent channel to the camera image
-        b, g, r = cv2.split(cam_pict)
-        alpha = np.ones_like(b) * 255 
-        rgba_image = cv2.merge((b, g, r, alpha))
+    #     # add a transparent channel to the camera image
+    #     b, g, r = cv2.split(cam_pict)
+    #     alpha = np.ones_like(b) * 255 
+    #     rgba_image = cv2.merge((b, g, r, alpha))
 
-        # resize the beam image 
-        beam_pict_resized = cv2.resize(beam_pict, (cam_pict.shape[1], cam_pict.shape[0]))
+    #     # resize the beam image 
+    #     beam_pict_resized = cv2.resize(beam_pict, (cam_pict.shape[1], cam_pict.shape[0]))
 
-        # overlay the images
-        overlay_pict = cv2.addWeighted(rgba_image, 1.0, beam_pict_resized, 0.3, 0)
-        ros_overlay_pict = self.bridge.cv2_to_imgmsg(overlay_pict, encoding="rgba8")
-        return ros_overlay_pict
+    #     # overlay the images
+    #     overlay_pict = cv2.addWeighted(rgba_image, 1.0, beam_pict_resized, 0.3, 0)
+    #     ros_overlay_pict = self.bridge.cv2_to_imgmsg(overlay_pict, encoding="rgba8")
+    #     return ros_overlay_pict
 
     
 
@@ -132,7 +124,7 @@ class Beamforming_node(Node):
         # subscribe to the audio and image topics
         self.subscription1 = self.create_subscription(AvReaderCom,'/extractor/av_message',self.av_callback,1)
         self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 1)
-        self.beam_overlay_image_publisher = self.create_publisher(Image,'beam_overlay_image',1)
+        self.beam_overlay_image_publisher = self.create_publisher(CompressedImage,'beam_overlay_image',1)
         self.bridge = CvBridge()
         self.model = "MICARRAY"
         self.beam = BeamForming(self.model)
@@ -151,6 +143,7 @@ class Beamforming_node(Node):
 
         # publish the beam and overlay image 
         self.beam_image_publisher.publish(beam_image_ros)
+        # overlay_pict = msg.compressed_image
         # self.beam_overlay_image_publisher.publish(overlay_pict)
         print("the beam image is published")
 
