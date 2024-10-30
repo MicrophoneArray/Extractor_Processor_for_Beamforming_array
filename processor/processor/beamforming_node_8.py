@@ -18,22 +18,22 @@ class cameraAlign:
 
     def __init__(self):
         #default values are based on transformation from ueye/left to mic_array (Use set_attributes to change alignment information)
-        self.position_x    = -0.47  #m
-        self.position_y    = -0.11    #m
-        self.position_z    = 0    #m
+        self.position_x    = 0.62826  #m
+        self.position_y    = -0.2692   #m
+        self.position_z    = -0.00404   #m
 
         self.alpha         = 0.0       
         self.beta          = 0.0
         self.gamma         = 0.0
         self.angle_of_view = 0.6        #rad  (half angle of view in horizontal direction)
-        self.aspect_ratio  = 0.628
+        self.aspect_ratio  = 0.6458
 
 class BeamForming:
     def __init__(self,model) -> None:
-        self.distance = 2
+        self.distance = 3
         self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/8_mic.xml')
         self.alignment = cameraAlign()
-        self.grid_increment = 0.4
+        self.grid_increment = 0.02
         self.array_arrngmnt = None
         self.x_min_grid = None
         self.x_max_grid = None
@@ -47,7 +47,7 @@ class BeamForming:
         # create the grid for beamforming 
         width  = 2 * (self.distance - self.alignment.position_z) * np.tan(self.alignment.angle_of_view)
         height = width * self.alignment.aspect_ratio
-        print(self.mg.mpos.shape)
+        print(height,width)
 
         width_new = 4
         height_new = 4
@@ -126,7 +126,7 @@ class Beamforming_node(Node):
         self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 1)
         self.beam_overlay_image_publisher = self.create_publisher(CompressedImage,'beam_overlay_image',1)
         self.bridge = CvBridge()
-        self.model = "MICARRAY"
+        self.model = "CAMERA"
         self.beam = BeamForming(self.model)
 
     def av_callback(self, msg):
