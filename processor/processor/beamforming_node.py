@@ -7,7 +7,6 @@ from sensor_msgs.msg import Image
 import os
 from cv_bridge import CvBridge
 import numpy as np
-import h5py
 from extractor_node.msg import AvReader
 import matplotlib.pyplot as plt
 from acoular import MicGeom, TimeSamples, PowerSpectra, RectGrid,\
