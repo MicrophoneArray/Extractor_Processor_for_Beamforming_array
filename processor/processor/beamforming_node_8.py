@@ -154,7 +154,7 @@ class BeamForming:
             points_beam.append(point)
 
 
-        for i in range(8):
+        for i in range(32):
             point = [-self.mg.mpos[2,i], self.mg.mpos[0,i], self.mg.mpos[1,i]]
             points_mic.append(point)
         
