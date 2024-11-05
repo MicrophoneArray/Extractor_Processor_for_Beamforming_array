@@ -32,7 +32,7 @@ class cameraAlign:
 class BeamForming:
     def __init__(self,model) -> None:
         self.distance = 3
-        self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/8_mic.xml')
+        self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/mic_on_the_car.xml')
         self.alignment = cameraAlign()
         self.grid_increment = 0.02
         self.array_arrngmnt = None
@@ -150,12 +150,12 @@ class BeamForming:
         #         points_beam.append(point)
 
         for i in range(grid_output.shape[1]):
-            point = [grid_output[2,i], grid_output[0,i], grid_output[1,i],255]
+            point = [-grid_output[2,i], grid_output[0,i], grid_output[1,i],255]
             points_beam.append(point)
 
 
         for i in range(8):
-            point = [self.mg.mpos[2,i], self.mg.mpos[0,i], self.mg.mpos[1,i]]
+            point = [-self.mg.mpos[2,i], self.mg.mpos[0,i], self.mg.mpos[1,i]]
             points_mic.append(point)
         
         mic_cloud = pc2.create_cloud(self.header, self.fields_mic, points_mic)
@@ -201,7 +201,7 @@ class Beamforming_node(Node):
     def av_callback(self, msg):
         print("the message received")
         audio_data = np.array(msg.audio).reshape(-1,56)
-        audio_data = audio_data[:,:8]
+        audio_data = audio_data[:, list(range(0, 24)) + list(range(48, 56))]
 
         # calculate the beam image
         self.beam.do_beamforming(audio_data)
