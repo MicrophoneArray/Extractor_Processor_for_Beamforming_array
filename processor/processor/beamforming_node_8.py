@@ -118,12 +118,12 @@ class BeamForming:
         
         # beacause the current design cannot detect the source of sound with respect to the height dimension
         # we just focus on the horizontal dimension
-        # row_sums = np.sum(image_matrix, axis=0)
-        # same_line_matrix = np.tile(row_sums, (112,1))
+        row_sums = np.sum(image_matrix, axis=0)
+        same_line_matrix = np.tile(row_sums, (112,1))
 
-        # line_max = same_line_matrix.max()
-        # line_min = same_line_matrix.min()
-        # normalized_same = np.clip((same_line_matrix - line_min) / (line_max - line_min) * 255, 0, 255).astype(np.uint8)
+        line_max = same_line_matrix.max()
+        line_min = same_line_matrix.min()
+        normalized_same = np.clip((same_line_matrix - line_min) / (line_max - line_min) * 255, 0, 255).astype(np.uint8)
 
         # transfer the gray scale image to a color image
         colormap = np.zeros((256, 4), dtype=np.uint8)
@@ -132,7 +132,7 @@ class BeamForming:
         colormap[:, 2] = 255
         colormap[:, 0] = np.linspace(255, 0, 256) 
         colormap[:, 3] = np.linspace(0, 255, 256)  
-        color_image = colormap[image_matrix]
+        color_image = colormap[normalized_same ]
         color_matrix = color_image.reshape((-1,4))
         img = np.flipud(color_image)
 
@@ -200,7 +200,8 @@ class Beamforming_node(Node):
 
     def av_callback(self, msg):
         print("the message received")
-        audio_data = np.array(msg.audio).reshape(-1,8)
+        audio_data = np.array(msg.audio).reshape(-1,56)
+        audio_data = audio_data[:,:8]
 
         # calculate the beam image
         self.beam.do_beamforming(audio_data)
