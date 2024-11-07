@@ -31,7 +31,7 @@ class cameraAlign:
         self.aspect_ratio  = 0.6458
 
 class BeamForming:
-    def __init__(self,model) -> None:
+    def __init__(self) -> None:
         self.distance = 3
         self.mg = MicGeom(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/Acoular_data/mic_on_the_car.xml')
         self.alignment = cameraAlign()
@@ -43,8 +43,6 @@ class BeamForming:
         self.y_max_grid = None
         self.bridge = CvBridge()
         self.mg.mpos[[0, 2]] = self.mg.mpos[[2, 0]]
-
-        self.freq = 1200
 
         # create the point cloud for microphone array detections 
         self.cloud =  PointCloud2()
@@ -71,12 +69,12 @@ class BeamForming:
 
         print("BeamForming initialized")
 
-    def do_beamforming(self, mic_data):
+    def do_beamforming(self, mic_data,freq):
 
         ts = TimeSamples(data=mic_data, sample_freq=44000)
         ps = PowerSpectra(time_data=ts, block_size=128, window='Hanning')
         bb = BeamformerBase(freq_data=ps, steer=self.st)
-        pm = bb.synthetic(1000, 2)
+        pm = bb.synthetic(freq, 2)
         self.Lm = L_p(pm)
         return
 
@@ -140,14 +138,18 @@ class Beamforming_node(Node):
         super().__init__('beamforming_processor',namespace='beamforming')
 
         # subscribe to the audio and image topics
-        self.subscription1 = self.create_subscription(AvReaderCom,'/extractor/av_message',self.av_callback,1)
+        self.audi_subscriber = self.create_subscription(AvReaderCom,'/extractor/av_message',self.av_callback,1)
         self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 1)
         self.beam_overlay_image_publisher = self.create_publisher(CompressedImage,'beam_overlay_image',1)
         self.mic_cloud_publisher = self.create_publisher(PointCloud2, '/mic_point_cloud', 1)
         self.beamforming_cloud_publisher = self.create_publisher(PointCloud2, '/beam_point_cloud', 1)
+        self.highest_frequency_subscriber = self.create_subscription(std_msgs.msg.Float32, '/spectrogram/max_frequency', self.highest_frequency_callback, 1)
         self.bridge = CvBridge()
-        self.model = "CAMERA"
-        self.beam = BeamForming(self.model)
+        self.freq = 1200
+        self.beam = BeamForming()
+
+    def highest_frequency_callback(self, msg):
+        self.freq= msg.data
 
     def av_callback(self, msg):
         print("the message received")
@@ -155,17 +157,14 @@ class Beamforming_node(Node):
         audio_data = audio_data[:, list(range(0, 24)) + list(range(48, 56))]
 
         # calculate the beam image
-        self.beam.do_beamforming(audio_data)
+        self.beam.do_beamforming(audio_data,self.freq)
         mic_cloud, beam_cloud = self.beam.draw_beam()
 
 
-        # # publish the beam and overlay image 
-        # self.beam_image_publisher.publish(beam_image_ros)
+        # publish the beamforming point cloud 
         self.mic_cloud_publisher.publish(mic_cloud)
         self.beamforming_cloud_publisher.publish(beam_cloud)
-        # # overlay_pict = msg.compressed_image
-        # # self.beam_overlay_image_publisher.publish(overlay_pict)
-        # print("the beam image is published")
+        print("the beam cloud is published")
 
 
 def main(args=None):
