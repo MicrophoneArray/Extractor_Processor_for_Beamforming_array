@@ -138,7 +138,7 @@ class BeamForming:
 
 class Beamforming_node(Node):
     def __init__(self):
-        super().__init__('beamforming_processor',namespace='beamforming')
+        super().__init__('beamforming_car',namespace='beamforming')
 
         # subscribe to the audio and image topics
         self.audi_subscriber = self.create_subscription(AvReaderCom,'/extractor/av_message',self.av_callback,1)

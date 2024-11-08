@@ -23,7 +23,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-        'beamforming_node = processor.beamforming_node:main'
+        'beamforming_node = processor.beamforming_node:main',
+        'beamforming_car = processor.beamforming_node_circular_grid:main'
         ],
     },
 )
