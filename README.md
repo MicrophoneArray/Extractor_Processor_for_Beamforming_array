@@ -9,7 +9,9 @@ To build the project, use the following command. This avoids potential dependenc
 `colcon build --merge-install --symlink-install --cmake-args -Wall -Wextra -Wpedantic`
 
 ## Run
-launch the extractor and processor with `ros2 launch processor processor.launch.py `
+Original Microphone Array: launch the extractor and processor with `ros2 launch processor processor.launch.py `
+
+Car Microphone Array: launch the extractor and processor with `ros2 launch processor processor_car.launch.py `
 
 ## Messages
 
