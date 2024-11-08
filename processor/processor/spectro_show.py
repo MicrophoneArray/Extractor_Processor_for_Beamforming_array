@@ -37,30 +37,21 @@ class AudioSpectrumNode(Node):
         # Convert the audio data to a numpy array and select the first channel
         audio_data = np.array(msg.audio, dtype=np.float32).reshape(-1, 56)
         audio_data_list = audio_data[:,[0,8,16,48]]
-        print(audio_data.shape)
-
 
         # FFT calculation for each side then get the best outcome 
-
         for i in range(4):
             audio = audio_data_list[:,i]
             N = len(audio)
             yf = fft(audio)
             if i == 0:
-                print(np.fft.fftfreq(N, 1 / 48000).shape)
                 xf = np.fft.fftfreq(N, 1 / 48000)
-                print(xf.shape)
             else:
-                print(xf.shape)
-                print(np.fft.fftfreq(N, 1 / 48000).shape)
                 xf = xf + np.fft.fftfreq(N, 1 / 48000)
                 
             idx = np.arange(0, N // 2)  # Only take the positive frequency part
         
         xf, yf = xf[idx], 2.0 / N * np.abs(yf[idx])
         xf = xf/ 4
-        
-        print(xf.shape,yf.shape)
 
         # Find the frequency with the highest amplitude
         max_freq_index = np.argmax(yf)

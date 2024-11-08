@@ -64,14 +64,15 @@ class BeamForming:
             PointField(name='rgb', offset=16, datatype=PointField.UINT32, count=1)
         ]
 
-        self.grid = ac.ImportGrid(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/circular_grid.xml')
+        self.grid = ac.ImportGrid(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/circular_grid_1.xml')
         self.st = SteeringVector(grid=self.grid, mics=self.mg)
+
 
         print("BeamForming initialized")
 
     def do_beamforming(self, mic_data,freq):
 
-        ts = TimeSamples(data=mic_data, sample_freq=44000)
+        ts = TimeSamples(data=mic_data, sample_freq=48000)
         ps = PowerSpectra(time_data=ts, block_size=128, window='Hanning')
         bb = BeamformerBase(freq_data=ps, steer=self.st)
         pm = bb.synthetic(freq, 2)
@@ -81,7 +82,7 @@ class BeamForming:
     def draw_beam(self):
         # this function is used to save the beam image as a Sensor_msgs/Image message 
 
-        plot_min = self.Lm.max() - 2
+        plot_min = self.Lm.max() - 3
         plot_max = self.Lm.max()
         normalized_matrix = np.clip((self.Lm - plot_min) / (plot_max - plot_min) * 255, 0, 255).astype(np.uint8)
         image_matrix = normalized_matrix.T 
@@ -92,6 +93,16 @@ class BeamForming:
         Lm_flat = self.Lm.flatten()
         print(Lm_flat.shape)
         grid_output = self.grid.gpos[:,Lm_flat> plot_min]
+        
+        # normalize the outcome to every column
+        Lm_line = self.Lm.reshape(20,360)
+        Lm_line_sum = np.sum(Lm_line, axis=0)/360
+        line_max = Lm_line_sum.max()
+        line_min = Lm_line_sum.max()-0.3
+        grid_output = self.grid.gpos.reshape(3,20,360)[:,:,Lm_line_sum>line_min].reshape(3,-1)
+        print(grid_output.shape)
+
+
 
         
         # # beacause the current design cannot detect the source of sound with respect to the height dimension
@@ -106,14 +117,6 @@ class BeamForming:
         points_mic = []
         points_beam = []
 
-        # for i in range(self.rg.gpos.shape[1]):
-        #     r = color_matrix[i,0]
-        #     g = color_matrix[i,1]
-        #     b = color_matrix[i,2]
-        #     if line_image_matrix[i] != 0:
-        #         rgb = self.rgb_to_uint32(r,g,b)
-        #         point = [self.rg.gpos[2,i], self.rg.gpos[0,i], self.rg.gpos[1,i],rgb]
-        #         points_beam.append(point)
 
         for i in range(grid_output.shape[1]):
             point = [-grid_output[1,i], grid_output[0,i], grid_output[2,i],255]
