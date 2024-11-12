@@ -3,8 +3,9 @@ import io
 import time
 import std_msgs.msg
 from rclpy.node import Node
-from sensor_msgs.msg import Image, CompressedImage, PointCloud2, PointField
+from sensor_msgs.msg import Image, CompressedImage, PointCloud2, PointField, PointCloud
 import os
+from geometry_msgs.msg import Point32
 import sensor_msgs_py.point_cloud2 as pc2
 from cv_bridge import CvBridge
 import numpy as np
@@ -14,6 +15,8 @@ import acoular as ac
 from acoular import MicGeom, TimeSamples, PowerSpectra, RectGrid,\
 SteeringVector, BeamformerBase, BeamformerMusic, BeamformerEig, L_p, Environment
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
+import struct
 
 
 class cameraAlign:
@@ -42,7 +45,8 @@ class BeamForming:
         self.y_min_grid = None
         self.y_max_grid = None
         self.bridge = CvBridge()
-        # self.mg.mpos[[0, 2]] = self.mg.mpos[[2, 0]]
+        self.mg.mpos[[0, 2]] = self.mg.mpos[[2, 0]]
+
 
         # create the point cloud for microphone array detections 
         self.cloud =  PointCloud2()
@@ -50,18 +54,11 @@ class BeamForming:
         self.header.stamp = rclpy.clock.Clock().now().to_msg()
         self.header.frame_id = 'cae_micarray_link'
         self.cloud.header = self.header
-
-        self.fields_mic = [
+        
+        self.fields_point = [
             PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
             PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
-            PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
-        ]
-
-        self.fields_with_color = [
-            PointField(name='x', offset=0, datatype=PointField.FLOAT32, count=1),
-            PointField(name='y', offset=4, datatype=PointField.FLOAT32, count=1),
-            PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1),
-            PointField(name='rgb', offset=16, datatype=PointField.UINT32, count=1)
+            PointField(name='z', offset=8, datatype=PointField.FLOAT32, count=1)
         ]
 
         self.grid = ac.ImportGrid(from_file='/cae-microphone-array-containerized/src/Extractor_V2/processor/resource/circular_grid_1.xml')
@@ -86,49 +83,31 @@ class BeamForming:
         plot_max = self.Lm.max()
         normalized_matrix = np.clip((self.Lm - plot_min) / (plot_max - plot_min) * 255, 0, 255).astype(np.uint8)
         image_matrix = normalized_matrix.T 
-        print(self.Lm.shape)
-        line_image_matrix = image_matrix.reshape(-1)
 
         # show the point with potential sound source 
         Lm_flat = self.Lm.flatten()
-        print(Lm_flat.shape)
         grid_output = self.grid.gpos[:,Lm_flat> plot_min]
         
         # normalize the outcome to every column
-        Lm_line = self.Lm.reshape(20,360)
-        Lm_line_sum = np.sum(Lm_line, axis=0)/360
+        Lm_line = self.Lm.reshape(10,180)
+        Lm_line_sum = np.sum(Lm_line, axis=0)/10
         line_max = Lm_line_sum.max()
-        line_min = Lm_line_sum.max()-0.3
-        grid_output = self.grid.gpos.reshape(3,20,360)[:,:,Lm_line_sum>line_min].reshape(3,-1)
-        print(grid_output.shape)
-
-
-
-        
-        # # beacause the current design cannot detect the source of sound with respect to the height dimension
-        # # we just focus on the horizontal dimension
-        # row_sums = np.sum(image_matrix, axis=0)
-        # same_line_matrix = np.tile(row_sums, (112,1))
-
-        # line_max = same_line_matrix.max()
-        # line_min = same_line_matrix.min()
-        # normalized_same = np.clip((same_line_matrix - line_min) / (line_max - line_min) * 255, 0, 255).astype(np.uint8)
+        line_min = Lm_line_sum.max()-1
+        grid_output = self.grid.gpos.reshape(3,10,180)[:,:,Lm_line_sum>line_min].reshape(3,-1)
 
         points_mic = []
         points_beam = []
 
 
         for i in range(grid_output.shape[1]):
-            point = [-grid_output[0,i], grid_output[1,i], grid_output[2,i],255]
-            points_beam.append(point)
-
+            points_beam.append([grid_output[2,i], grid_output[1,i], grid_output[0,i]])
 
         for i in range(32):
             point = [-self.mg.mpos[0,i], self.mg.mpos[1,i], self.mg.mpos[2,i]]
             points_mic.append(point)
         
-        mic_cloud = pc2.create_cloud(self.header, self.fields_mic, points_mic)
-        beam_cloud = pc2.create_cloud(self.header, self.fields_with_color, points_beam)
+        mic_cloud = pc2.create_cloud(self.header, self.fields_point, points_mic)
+        beam_cloud = pc2.create_cloud(self.header, self.fields_point, points_beam)
 
         return mic_cloud, beam_cloud
     
@@ -145,7 +124,7 @@ class Beamforming_node(Node):
         self.beam_image_publisher = self.create_publisher(Image, 'beam_image', 1)
         self.beam_overlay_image_publisher = self.create_publisher(CompressedImage,'beam_overlay_image',1)
         self.mic_cloud_publisher = self.create_publisher(PointCloud2, '/mic_point_cloud', 1)
-        self.beamforming_cloud_publisher = self.create_publisher(PointCloud2, '/beam_point_cloud', 1)
+        self.mic_cloud_cloud_publisher = self.create_publisher(PointCloud2, '/beam_point_cloud', 1)
         self.highest_frequency_subscriber = self.create_subscription(std_msgs.msg.Float32, '/spectrogram/max_frequency', self.highest_frequency_callback, 1)
         self.bridge = CvBridge()
         self.freq = 1200
@@ -166,7 +145,7 @@ class Beamforming_node(Node):
 
         # publish the beamforming point cloud 
         self.mic_cloud_publisher.publish(mic_cloud)
-        self.beamforming_cloud_publisher.publish(beam_cloud)
+        self.mic_cloud_cloud_publisher.publish(beam_cloud)
         print("the beam cloud is published")
 
 
