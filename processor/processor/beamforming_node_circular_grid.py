@@ -45,7 +45,7 @@ class BeamForming:
         self.y_min_grid = None
         self.y_max_grid = None
         self.bridge = CvBridge()
-        self.mg.mpos[[0, 2]] = self.mg.mpos[[2, 0]]
+        # self.mg.mpos[[0, 2]] = self.mg.mpos[[2, 0]]
 
 
         # create the point cloud for microphone array detections 
@@ -100,7 +100,7 @@ class BeamForming:
 
 
         for i in range(grid_output.shape[1]):
-            points_beam.append([grid_output[2,i], grid_output[1,i], grid_output[0,i]])
+            points_beam.append([grid_output[0,i], grid_output[1,i], grid_output[2,i]])
 
         for i in range(32):
             point = [-self.mg.mpos[0,i], self.mg.mpos[1,i], self.mg.mpos[2,i]]
