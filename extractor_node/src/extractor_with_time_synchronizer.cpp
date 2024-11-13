@@ -55,7 +55,6 @@ private:
           // transfer the audio data to a double array
           std::vector<double> double_data(num_doubles);
           std::memcpy(double_data.data(), data.data(), length);
-          std::cout << "Vector length: " << num_doubles << std::endl;
 
           av_reader.audio = double_data;
           av_publisher->publish(av_reader);
